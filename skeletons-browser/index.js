@@ -1,3 +1,5 @@
+var config = require('./config');
+
 var Kinect2 = require('kinect2'),
 	express = require('express'),
 	app = express(),
@@ -12,7 +14,7 @@ var Message = require('azure-iot-device').Message;
 
 var outputResult = null;
 //var connectionString = 'HostName=HacksterIoTHub.azure-devices.net;DeviceId=myFirstNodeDevice;SharedAccessKey=ZZ6gJr4V/X5XI3ghb9LZUbvSEYxE+zapPPJ1N8PBfLk=';
-var connectionString = 'HostName=HacksterIoTHub.azure-devices.net;DeviceId=kinectNodeDevice;SharedAccessKey=lduni4cs3dL5mb+bElwwCMVQG4gvC3c7vZZQTIuecKc=';
+var connectionString = config.iotConnectionString; //'HostName=HacksterIoTHub.azure-devices.net;DeviceId=kinectNodeDevice;SharedAccessKey=lduni4cs3dL5mb+bElwwCMVQG4gvC3c7vZZQTIuecKc=';
 var client = clientFromConnectionString(connectionString);
 
 function printResultFor(op) {
@@ -96,9 +98,9 @@ var connectCallback = function (err) {
 
 		if(kinect.open()) {
 			
-			server.listen(8000);
-			console.log('Server listening on port 8000');
-			console.log('Point your browser to http://localhost:8000');
+			server.listen(config.port);
+			console.log('Server listening on port ' + config.port);
+			console.log('Point your browser to http://localhost:' + config.port);
 
 			var staticPath = path.join(__dirname, '/public');
 			app.use(express.static(staticPath));
@@ -119,7 +121,7 @@ var connectCallback = function (err) {
 
 			kinect.openBodyReader();
 
-			setInterval(sendLastMessage, 3000);
+			setInterval(sendLastMessage, config.messageInterval /*2000*/);
 
 		}
 
@@ -147,17 +149,15 @@ var Promise = require('bluebird');
 var EventHubClient = require('azure-event-hubs').Client;
 var moment = require('moment');
 
-
-
 // The Event Hubs SDK can also be used with an Azure IoT Hub connection string.
 // In that case, the eventHubPath variable is not used and can be left undefined.
-var eventHubConnectionString = 'Endpoint=sb://kinectiot-eventhub.servicebus.windows.net/;SharedAccessKeyName=nodeclient;SharedAccessKey=bx5Nx8YpeFAQNyVGrxxa3p8tA8L55cIfT2k+JkRhKDs=';
-var eventHubPath = 'kinectiot-eventhub';
+var eventHubConnectionString = config.eventHubConnectionString; //'Endpoint=sb://kinectiot-eventhub.servicebus.windows.net/;SharedAccessKeyName=nodeclient;SharedAccessKey=bx5Nx8YpeFAQNyVGrxxa3p8tA8L55cIfT2k+JkRhKDs=';
+var eventHubPath = config.eventHubPath; //'kinectiot-eventhub';
 var eventHubClient = EventHubClient.fromConnectionString(eventHubConnectionString, eventHubPath);
 
 // Set the consumer group and start time offset for the event hub receivers
 // If you have created a consumer group for your node app to use, enter it here
-var consumerGroup = '$Default';  
+var consumerGroup = config.eventHubConsumerGroup; //'$Default';  
 // Set the consumer up to receive only new messages, not all the old ones as well
 // set receiveAfterTime to null to read all of the messages from the beginning 
 var receiveAfterTime = Date.now() - 5000;
@@ -208,3 +208,32 @@ eventHubClient.open()
   //   .then(client.createSender.bind(client))
   //   .then(sendEvent('foo'))
   .catch(printError);
+
+
+
+
+// AnkleLeft	14 	Left ankle
+// AnkleRight	18 	Right ankle
+// ElbowLeft	5 	Left elbow
+// ElbowRight	9 	Right elbow
+// FootLeft	15 	Left foot
+// FootRight	19 	Right foot
+// HandLeft	7 	Left hand
+// HandRight	11 	Right hand
+// HandTipLeft	21 	Tip of the left hand
+// HandTipRight	23 	Tip of the right hand
+// Head	3 	Head
+// HipLeft	12 	Left hip
+// HipRight	16 	Right hip
+// KneeLeft	13 	Left knee
+// KneeRight	17 	Right knee
+// Neck	2 	Neck
+// ShoulderLeft	4 	Left shoulder
+// ShoulderRight	8 	Right shoulder
+// SpineBase	0 	Base of the spine
+// SpineMid	1 	Middle of the spine
+// SpineShoulder	20 	Spine at the shoulder
+// ThumbLeft	22 	Left thumb
+// ThumbRight	24 	Right thumb
+// WristLeft	6 	Left wrist
+// WristRight	10 	Right wrist

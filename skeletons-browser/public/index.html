@@ -11,12 +11,12 @@
 
 <body>
 	<script src="bundle.js"></script> 
-	<!--<script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>-->
+	<!--<script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>-->
 	<!--<script src="https://rawgit.com/ngokevin/aframe-layout-component/master/dist/aframe-layout-component.min.js"></script>
 	<script src="https://rawgit.com/ngokevin/aframe-template-component/master/dist/aframe-template-component.min.js"></script>-->
 	
 
-	<canvas id="bodyCanvas" width="512" height="424"></canvas>
+	<!--<canvas id="bodyCanvas" width="512" height="424"></canvas>-->
 	<!--<script src="/socket.io/socket.io.js"></script>-->
 
 	<script>
@@ -66,7 +66,7 @@
 				});
 				
 				socket.on('label', function(labelText){
-					el.emit('label', { data: labelText });
+					el.emit('labelreceived', { data: labelText });
 				});
 
 				// window.addEventListener('click', function () {
@@ -75,22 +75,28 @@
 			}
 		});
 
-		// AFRAME.registerComponent('labeller', {
-		// schema: {
-		// 	on: { default: 'label' },			
-		// 	target: { default: '' },
-		// 	mixin: { default: '' }
-		// },
-		// init: function () {
-		// 	//var el = this.el;
-		// }
-		// );
-
-		AFRAME.registerComponent('bodyFramer', {
+		AFRAME.registerComponent('labeller', {
 		schema: {
-			on: { default: 'bodyFrame' },			
-			target: { default: '' },
-			mixin: { default: '' }
+			on: { default: 'labelreceived' },
+			target: { default: '#labelText'}								
+		},
+		init: function () {
+			var el = this.el;
+			this.el.addEventListener(this.data.on, this.adjust.bind(this));
+		},
+		adjust: function (evt) {
+			var labelText = evt.detail.data;						
+			var textscroller = this.el.sceneEl.querySelector(this.data.target);
+
+			//var textComponent = textscroller.components['bmfont-text'];
+			textscroller.setAttribute("bmfont-text",{ text : "----> " + labelText.toUpperCase() + " <----" });	
+		}
+		});
+
+		AFRAME.registerComponent('body-frame-update', {
+		schema: {
+			on: { default: 'bodyFrame' },						
+			mixin: { default: 'joint' }
 		},
 		init: function () {
 			/*var targetEls = this.el.sceneEl.querySelectorAll(this.data.target);
@@ -104,6 +110,33 @@
 			for (var i = 0; i < total; i++) {
 				var entity = document.createElement('a-entity');
 				entity.setAttribute('mixin', this.data.mixin);
+				
+				//entity.setAttribute('geometry', { radius: 0.2 })
+
+
+				switch(i) {
+					case 0:
+					case 2:
+						entity.setAttribute('geometry', { radius: 0.1 })
+						break;
+					case 3:
+						entity.setAttribute('geometry', { radius: 0.25 })
+						break;
+					case 21:
+					case 22:
+					case 23:
+					case 24:
+					//case 6:
+					//case 7:
+					//case 10:
+					//case 11:
+						entity.setAttribute('geometry', { radius: 0.08 })
+						break;					
+					default:
+						entity.setAttribute('geometry', { radius: 0.15 })
+				}
+
+
 				this.targets.push(entity.object3D);
 				el.sceneEl.appendChild(entity);
 			}
@@ -150,27 +183,35 @@
 		});
 		
 	</script>
-	<a-scene>
+	<a-scene physics canvas keyboard-shortcuts socket-listener body-frame-update labeller>
 		<a-assets>			 
-			 <a-mixin id="joint"
+			 <!--<a-mixin id="joint"
              geometry="primitive: sphere; radius: 0.1; translate: 0 -2 0"
              material="color: green; metalness: 0.2; opacity: 0.2; roughness: 0.3"
+             rotation="0 0 0"></a-mixin>-->
+			 <a-mixin id="joint"
+             geometry="primitive: sphere; radius: 0.1; translate: 0 -2 0"
+             material="src: url(img/earth-sm.jpg); metalness: 0.2; opacity: 0.3; roughness: 0.3"
              rotation="0 0 0"></a-mixin>
 		</a-assets>
 		<a-light type="ambient" color="#222"></a-light>
-		<a-light type="point" position="0 1 0" intensity="2" ></a-light>
-		<a-circle color="#333" opacity="0.8" rotation="-90 0 0" radius="12" roughness="1" material="" geometry="" position="" scale="" visible=""></a-circle>
+		<a-light type="point" position="0 5 0" intensity="2" ></a-light>
+		<a-circle color="#333" opacity="0.8" rotation="-90 0 0" radius="12" roughness="1" ></a-circle>
 		<!--<a-plane rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>-->
 		<!--<a-sky color="#ECECEC"></a-sky>-->
 		<a-sky color="#222" ></a-sky>		
 		<!--<a-plane rotation="-90 0 0" color="#0C2233" height="25" width="25" position="0 -0.1 0"></a-plane>-->
-		<a-camera id="player" position="0 2.5 1" rotation="0 0 0" bodyFramer="on: bodyFrame; mixin: joint" socket-listener>
-		</a-camera>
+		<a-entity position="0.25 3 5" wasd-controls look-controls >
+        	<a-camera></a-camera>
+		</a-entity>
+		<!--<a-entity camera wasd-controls look-controls socket-listener body-frame-update></a-entity>-->
+		<!--<a-camera id="player" rotation="0 0 0" socket-listener body-frame-update >
+		</a-camera>-->
 
-		 <!--<a-entity bmfont-text="text:_ Ron Dagdag _;" scale="2 2 2">
-                    <a-animation attribute="position" begin="0" from="-1.5 2.5 -10" to="-1.5 2.5 10" dur="5000" easing="linear" repeat="0"></a-animation>
-                    <a-animation attribute="visible" begin="0" dur="5000" from="true" to="false"></a-animation>
-                </a-entity>     -->
+		 <a-entity id="labelText" bmfont-text="text:_ Ron Dagdag _;" scale="10 10 10" >
+                    <a-animation attribute="position" begin="0" from="-7 2.5 -15" to="-7 2.5 15" dur="4000" easing="linear" repeat="100"></a-animation>
+                    <!--<a-animation attribute="visible" begin="0" dur="5000" from="true" to="false"></a-animation>-->
+                </a-entity>     
 
 	</a-scene>
 </body>
