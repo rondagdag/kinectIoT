@@ -1,0 +1,7 @@
+\\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\bin\Debug\Kinect.Server.exe
+\\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\bin\Debug\Kinect.Server.pdb
+\\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\bin\Debug\Fleck.dll
+\\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\bin\Debug\Microsoft.Kinect.dll
+\\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\bin\Debug\Microsoft.Kinect.xml
+\\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\obj\x86\Debug\Kinect.Server.exe
+\\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\obj\x86\Debug\Kinect.Server.pdb
