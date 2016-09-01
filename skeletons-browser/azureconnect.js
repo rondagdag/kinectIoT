@@ -131,23 +131,23 @@ var connectCallback = function (err) {
 					console.log('echo-protocol Connection Closed');
 			});
 			connection.on('message', function(event) {
-				console.log(event);
+				//console.log(event);
 					/*if (message.type === 'utf8') {
 							console.log("Received: '" + message.utf8Data + "'");
 					}*/
-					 if (typeof event.data === "string") {
-            // SKELETON DATA
+				if (typeof event.data === "string") {
+					// SKELETON DATA
 
-            // Get the data in JSON format.
-            var bodyFrame = JSON.parse(event.data);
-
-						//io.sockets.emit('bodyFrame', bodyFrame);
-							bodyFrame.skeletons.forEach(function(body){
-									console.log(body);
-									/*if(body.tracked) {
-										updateHandState(body.leftHandState, body);
-									}	*/				
-							});
+					// Get the data in JSON format.
+					var bodyFrame = JSON.parse(event.data);
+					console.log(bodyFrame);
+					io.sockets.emit('bodyFrame', bodyFrame);
+					bodyFrame.skeletons.forEach(function(body){
+							console.log(body);
+							/*if(body.tracked) {
+								updateHandState(body.leftHandState, body);
+							}	*/				
+					});
 
             // Display the skeleton joints.
             // for (var i = 0; i < jsonObject.skeletons.length; i++) {
@@ -167,7 +167,7 @@ var connectCallback = function (err) {
 				
 			setInterval(sendLastMessage, config.messageInterval /*2000*/);
 
-			connection.sendUTF("Depth");
+			connection.sendUTF("Color");
 		});
 
 		/*if(kinect.open()) {
