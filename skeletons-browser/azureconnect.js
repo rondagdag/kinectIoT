@@ -131,6 +131,7 @@ var connectCallback = function (err) {
 					console.log('echo-protocol Connection Closed');
 			});
 			connection.on('message', function(event) {
+				console.log(event);
 					/*if (message.type === 'utf8') {
 							console.log("Received: '" + message.utf8Data + "'");
 					}*/
@@ -165,6 +166,8 @@ var connectCallback = function (err) {
 			});
 				
 			setInterval(sendLastMessage, config.messageInterval /*2000*/);
+
+			connection.sendUTF("Depth");
 		});
 
 		/*if(kinect.open()) {
@@ -204,7 +207,8 @@ var connectCallback = function (err) {
 			});
 		}); 
 
-		wsclient.connect('ws://localhost:8181/', 'echo-protocol');
+		wsclient.connect('ws://localhost:8181/');
+		
 
 		//setInterval(sendEventByBatch, 10000);
 	}
