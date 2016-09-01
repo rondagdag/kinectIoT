@@ -1,13 +1,14 @@
 var config = require('./config');
 
-var Kinect2 = require('kinect2'),
-	express = require('express'),
+
+var express = require('express'),
 	app = express(),
 	server = require('http').createServer(app),
 	path = require('path'),
 	io = require('socket.io').listen(server);
 
-var kinect = new Kinect2();
+var WebSocketClient = require('websocket').client;
+var wsclient = new WebSocketClient();
 
 var clientFromConnectionString = require('azure-iot-device-mqtt').clientFromConnectionString;
 var Message = require('azure-iot-device').Message;
@@ -95,8 +96,79 @@ var connectCallback = function (err) {
     console.log('Could not connect: ' + err);
   } else {
     console.log('Client connected');
+		 		
+		wsclient.on('connectFailed', function(error) {
+    	console.log('Connect Error: ' + error.toString());
+		});
+		
+		wsclient.on('connect', function(connection) {
 
-		if(kinect.open()) {
+			server.listen(config.port);
+			console.log('Server listening on port ' + config.port);
+			console.log('Point your browser to http://localhost:' + config.port);
+
+			var staticPath = path.join(__dirname, '/public');
+			app.use(express.static(staticPath));
+		
+			// kinect.on('bodyFrame', function(bodyFrame){
+			// 	//console.log(bodyFrame);
+			// 	io.sockets.emit('bodyFrame', bodyFrame);
+			// 	bodyFrame.bodies.forEach(function(body){
+			// 			if(body.tracked) {
+			// 				updateHandState(body.leftHandState, body);
+			// 			}					
+			// 	});
+			// });
+
+			// kinect.openBodyReader();
+
+		
+			console.log('WebSocket Client Connected');
+			connection.on('error', function(error) {
+					console.log("Connection Error: " + error.toString());
+			});
+			connection.on('close', function() {
+					console.log('echo-protocol Connection Closed');
+			});
+			connection.on('message', function(event) {
+				//console.log(event);
+				if (event.type === 'utf8') {
+						console.log("Received: '" + event.utf8Data + "'");
+					// SKELETON DATA
+
+					// Get the data in JSON format.
+					var bodyFrame = JSON.parse(event.utf8Data);
+					console.log(bodyFrame);
+					io.sockets.emit('bodyFrame', bodyFrame);
+					bodyFrame.skeletons.forEach(function(body){
+							console.log(body);
+							/*if(body.tracked) {
+								updateHandState(body.leftHandState, body);
+							}	*/				
+					});
+
+            // Display the skeleton joints.
+            // for (var i = 0; i < jsonObject.skeletons.length; i++) {
+            //     for (var j = 0; j < jsonObject.skeletons[i].joints.length; j++) {
+            //         var joint = jsonObject.skeletons[i].joints[j];
+
+                    // Draw!!!
+                    /*context.fillStyle = "#FF0000";
+                    context.beginPath();
+                    context.arc(joint.x, joint.y, 10, 0, Math.PI * 2, true);
+                    context.closePath();
+                    context.fill();*/
+             //   }
+            //}
+        	}
+			});
+				
+			setInterval(sendLastMessage, config.messageInterval /*2000*/);
+
+			connection.sendUTF("Color");
+		});
+
+		/*if(kinect.open()) {
 			
 			server.listen(config.port);
 			console.log('Server listening on port ' + config.port);
@@ -121,9 +193,9 @@ var connectCallback = function (err) {
 
 			kinect.openBodyReader();
 
-			setInterval(sendLastMessage, config.messageInterval /*2000*/);
+			setInterval(sendLastMessage, config.messageInterval );
 
-		}
+		}*/
 
 		
 		client.on('message', function (msg) { 
@@ -132,6 +204,9 @@ var connectCallback = function (err) {
 				console.log('completed');
 			});
 		}); 
+
+		wsclient.connect('ws://localhost:8181/');
+		
 
 		//setInterval(sendEventByBatch, 10000);
 	}

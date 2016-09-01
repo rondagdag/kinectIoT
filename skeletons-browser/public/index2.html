@@ -138,25 +138,25 @@
 			var index = 0;
 
 			var that = this;
-			bodyFrame.skeletons.forEach(function(body){
-				//if(body.tracked) {
+			bodyFrame.bodies.forEach(function(body){
+				if(body.tracked) {
 					for (i = 0; i < body.joints.length; i++) {
 						var jointType = body.joints[i];
 						var joint = body.joints[i]; 
     					var ballJoint = that.targets[i];
-						ballJoint.position.x = (joint.x * 2) - 0.75;
-						ballJoint.position.y = 5 - (joint.y * 2);						
-						ballJoint.position.z = joint.z - 1;//joint.depthZ * 0.01;
+						ballJoint.position.x = (joint.depthX * 2) - 0.75;
+						ballJoint.position.y = 5 - (joint.depthY * 2);						
+						ballJoint.position.z = joint.cameraZ - 1;//joint.depthZ * 0.01;
 						//joint.depthX * 512, joint.depthY * 424
-						console.log(joint.x);
-						console.log(joint.y);
+						console.log(joint.depthX);
+						console.log(joint.depthY);
 						console.log(ballJoint);
 					}
 					//draw hand states
-					//updateHandState(body.leftHandState, that.targets[7]);
-					//updateHandState(body.rightHandState, that.targets[11]);
+					updateHandState(body.leftHandState, that.targets[7]);
+					updateHandState(body.rightHandState, that.targets[11]);
 					index++;
-				//}
+				}
 			});
 
 		}
