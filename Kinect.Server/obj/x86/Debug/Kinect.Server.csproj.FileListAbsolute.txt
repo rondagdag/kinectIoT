@@ -5,3 +5,10 @@
 \\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\bin\Debug\Microsoft.Kinect.xml
 \\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\obj\x86\Debug\Kinect.Server.exe
 \\Mac\Home\Desktop\Kinect-HTML5-master\Kinect-HTML5-master\Kinect.Server\obj\x86\Debug\Kinect.Server.pdb
+Y:\GitHub\kinectIoT\Kinect.Server\obj\x86\Debug\Kinect.Server.exe
+Y:\GitHub\kinectIoT\Kinect.Server\obj\x86\Debug\Kinect.Server.pdb
+Y:\GitHub\kinectIoT\Kinect.Server\bin\Debug\Kinect.Server.exe
+Y:\GitHub\kinectIoT\Kinect.Server\bin\Debug\Kinect.Server.pdb
+Y:\GitHub\kinectIoT\Kinect.Server\bin\Debug\Microsoft.Kinect.dll
+Y:\GitHub\kinectIoT\Kinect.Server\bin\Debug\Microsoft.Kinect.xml
+Y:\GitHub\kinectIoT\Kinect.Server\obj\x86\Debug\Kinect.Server.csprojResolveAssemblyReference.cache

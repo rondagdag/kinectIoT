@@ -71,7 +71,7 @@ namespace Kinect.Server
                 {
                     Point point = new Point();
 
-                    switch (mode)
+                    /*switch (mode)
                     {
                         case Mode.Color:
                             ColorImagePoint colorPoint = mapper.MapSkeletonPointToColorPoint(joint.Position, ColorImageFormat.RgbResolution640x480Fps30);
@@ -85,8 +85,11 @@ namespace Kinect.Server
                             break;
                         default:
                             break;
-                    }
+                    }*/
 
+                    point.X = joint.Position.X;
+                    point.Y = joint.Position.Y;
+                    
                     jsonSkeleton.Joints.Add(new JSONJoint
                     {
                         Name = joint.JointType.ToString().ToLower(),
