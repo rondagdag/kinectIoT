@@ -1,6 +1,5 @@
 var config = require('./config');
 
-
 var express = require('express'),
 	app = express(),
 	server = require('http').createServer(app),
@@ -141,6 +140,10 @@ var connectCallback = function (err) {
 					io.sockets.emit('bodyFrame', bodyFrame);
 					bodyFrame.skeletons.forEach(function(body){
 							console.log(body);
+
+							body.leftHandState = 3; // predictive mode
+							updateHandState(body.leftHandState, body);
+
 							/*if(body.tracked) {
 								updateHandState(body.leftHandState, body);
 							}	*/				
@@ -237,17 +240,7 @@ var consumerGroup = config.eventHubConsumerGroup; //'$Default';
 var receiveAfterTime = Date.now() - 5000;
 
 
-// Log a received message body out to the console
-var printEvent = function (ehEvent) {
-  var body = ehEvent.body
-  var created = moment(body.timecreated);
-  //console.log(body);
 
-  console.log("output " + body['scored labels']);
-	io.sockets.emit('label', body['scored labels']);
-  //var val = Number(body.value);
-  //console.log(created.format("hh:mm:ss a") + " - " + body.measurename + ": " + val.toFixed(2) + body.unitofmeasure);
-};
 
 // Log an error to the console
 var printError = function (err) {
@@ -262,7 +255,31 @@ var sendEvent = function (eventBody) {
   };
 };
 
-eventHubClient.open()
+var five = require(
+    "johnny-five"
+);
+var board = new five.Board({ port: "COM3" });
+var colors = Object.keys(require("css-color-names"));
+
+
+board.on("ready", () => {
+  var lcd = new five.LCD({
+    controller: "JHD1313M1"
+  });
+
+  lcd.bgColor("yellow");
+
+  // Log a received message body out to the console
+	var printEvent = function (ehEvent) {
+	var body = ehEvent.body
+	var created = moment(body.timecreated);
+	
+		console.log("output " + body['scored labels']);
+		io.sockets.emit('label', body['scored labels']);
+		lcd.print("output " + body['scored labels']);
+	};
+
+  eventHubClient.open()
   .then(eventHubClient.getPartitionIds.bind(eventHubClient))
   .then(function (partitionIds) {
     return partitionIds.map(function (partitionId) {
@@ -276,14 +293,10 @@ eventHubClient.open()
         });
     });
   })
-  // The send commands have been commented out since we want to just receive
-  // messages from the Photon sender, but you can see how you could use this code
-  // to send messages as well..
-  //   .then(client.createSender.bind(client))
-  //   .then(sendEvent('foo'))
   .catch(printError);
 
-
+}
+);
 
 
 // AnkleLeft	14 	Left ankle

@@ -5,5 +5,5 @@ config.eventHubConnectionString = 'Endpoint=sb://kinectiot-eventhub.servicebus.w
 config.eventHubPath = 'kinectiot-eventhub';
 config.eventHubConsumerGroup = '$Default';  
 config.port = 8000;
-config.messageInterval = 2000;
+config.messageInterval = 3000;
 module.exports = config;
