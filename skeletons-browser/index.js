@@ -52,9 +52,9 @@ function getJoints(joints)
 	for (var i = 0; i < total; i++) {
 		var joint = joints[i];
 		saveJoints.push({
-			depthX : joint.depthX,
-			depthY : joint.depthY,
-			cameraZ : joint.cameraZ
+			depthX : joint.x,
+			depthY : joint.y,
+			cameraZ : joint.z
 		});		
 	}	
 	 return saveJoints;

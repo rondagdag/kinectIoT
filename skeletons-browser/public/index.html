@@ -144,9 +144,14 @@
 						var jointType = body.joints[i];
 						var joint = body.joints[i]; 
     					var ballJoint = that.targets[i];
-						ballJoint.position.x = (joint.x * 2) - 0.75;
-						ballJoint.position.y = 5 - (joint.y * 2);						
+
+						ballJoint.position.x = (joint.x * 2);
+						ballJoint.position.y = (joint.y * 2) + 3;						
 						ballJoint.position.z = joint.z - 1;//joint.depthZ * 0.01;
+						
+						//ballJoint.position.x = (joint.x * 0.01) - 0.75;
+						//ballJoint.position.y = 1 - (joint.y * 0.01);						
+						//ballJoint.position.z = (joint.z * 0.01) - 1;//joint.depthZ * 0.01;
 						//joint.depthX * 512, joint.depthY * 424
 						console.log(joint.x);
 						console.log(joint.y);
