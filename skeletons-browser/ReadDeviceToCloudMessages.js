@@ -2,7 +2,7 @@
 
 
 var EventHubClient = require('azure-event-hubs').Client;
-var connectionString = 'HostName=HacksterIoTHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=7AKT2CYp+yT4z7OHJkQzBX/QX1EpsWnm9FchNiBtxIg=';
+var connectionString = config.iotDeviceIdConnectionString; 
 
 
 var printError = function (err) {

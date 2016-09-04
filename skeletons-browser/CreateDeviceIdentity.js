@@ -2,13 +2,11 @@
 var iothub = require('azure-iothub');
 var config = require('./config');
 
-var connectionString = config.iotConnectionString; 
-
+var connectionString = config.iotDeviceIdConnectionString; 
 var registry = iothub.Registry.fromConnectionString(connectionString);
 
-
 var device = new iothub.Device(null);
-device.deviceId = 'kinectNodeDevice';
+device.deviceId = 'kinectNodeDevice1';
 registry.create(device, function(err, deviceInfo, res) {
   if (err) {
     registry.get(device.deviceId, printDeviceInfo);
