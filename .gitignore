@@ -84,4 +84,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-config.js
+skeletons-browser/config.js
