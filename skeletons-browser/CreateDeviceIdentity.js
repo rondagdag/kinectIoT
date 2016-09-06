@@ -2,7 +2,7 @@
 var iothub = require('azure-iothub');
 var config = require('./config');
 
-var connectionString = 'HostName=HacksterIoTHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=7AKT2CYp+yT4z7OHJkQzBX/QX1EpsWnm9FchNiBtxIg='; 
+var connectionString = 'HostName=HacksterIoTHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey='; 
 var registry = iothub.Registry.fromConnectionString(connectionString);
 
 var device = new iothub.Device(null);
