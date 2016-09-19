@@ -6,5 +6,5 @@ To Run the Kinect Server ->
   go to Kinect.Server\bin\Debug\Kinect.Server.exe
   
 To run the WebVR Server -> 
-  > cd skeletons-browser
-  > node index.js
+  cd skeletons-browser
+  node index.js
